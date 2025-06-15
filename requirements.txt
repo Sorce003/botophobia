@@ -1,5 +1,6 @@
-pyrogram
+pyrogram==2.0.106
+pytgcalls==2.0.0
+tgcalls==2.0.0
 tgcrypto
-pytgcalls
 pydub
 ffmpeg-python
