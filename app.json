@@ -1,0 +1,41 @@
+{
+  "name": "VC Dominator Userbot",
+  "description": "A modern Pyrogram-based Telegram userbot for VC, audio amplification, and group moderation.",
+  "repository": "https://github.com/yourgithubusername/VC_Dominator_Userbot_Heroku",
+  "logo": "https://raw.githubusercontent.com/yourgithubusername/VC_Dominator_Userbot_Heroku/main/logo.png",
+  "keywords": ["telegram", "userbot", "pyrogram", "pytgcalls", "vc"],
+  "env": {
+    "API_ID": {
+      "description": "Your Telegram API ID (integer, get from https://my.telegram.org/)",
+      "required": true
+    },
+    "API_HASH": {
+      "description": "Your Telegram API HASH (get from https://my.telegram.org/)",
+      "required": true
+    },
+    "STRING_SESSION": {
+      "description": "Pyrogram String Session (recommended for Heroku)",
+      "required": true
+    },
+    "VC_CHAT_ID": {
+      "description": "Optional: Default VC/group chat ID",
+      "required": false
+    },
+    "SECONDARY_OWNER_ID": {
+      "description": "Your secondary owner Telegram user ID (as string)",
+      "required": false
+    },
+    "SUDO_IDS": {
+      "description": "A Python list of SUDO user IDs (e.g. [\"1234\",\"5678\"])",
+      "required": false
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku-community/apt"
+    },
+    {
+      "url": "heroku/python"
+    }
+  ]
+}
