@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from pytgcalls import PyTgCalls
-from pytgcalls.types.input_stream.advanced import AudioPiped
+from pytgcalls.types.input_stream import AudioPiped   # <-- Correct for pytgcalls 2.x!
 from pytgcalls.types import StreamType
 from pyrogram.types import Message
 import os
