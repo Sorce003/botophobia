@@ -1,14 +1,21 @@
 from pyrogram import Client, filters
-from pytgcalls import PyTgCalls
-from pytgcalls.types.input_stream import AudioPiped   # <-- Correct for pytgcalls 2.x!
-from pytgcalls.types import StreamType
-from pyrogram.types import Message
 import os
 import random
 import asyncio
+from pyrogram.types import Message
 from pyrogram.errors import FloodWait
 from utils.audio_tools import process_audio
 from config import API_ID, API_HASH, VC_CHAT_ID, STRING_SESSION, SECONDARY_OWNER_ID, SUDO_IDS
+
+# --- Auto-compatible imports for PyTgCalls 1.x and 2.x+ ---
+try:
+    from pytgcalls import PyTgCalls
+    from pytgcalls.types.input_stream import AudioPiped
+    from pytgcalls.types import StreamType
+except ImportError:
+    # Fallback for pytgcalls 1.x
+    from pytgcalls import PyTgCalls, StreamType
+    from pytgcalls.types import AudioPiped
 
 # ---- Session Setup (String Session or API ID/HASH) ----
 if STRING_SESSION and STRING_SESSION.strip():
