@@ -1,6 +1,7 @@
 from pyrogram import Client, filters
 from pytgcalls import PyTgCalls
-from pytgcalls.types.input_stream import InputStream, AudioPiped
+from pytgcalls.types.input_stream.advanced import AudioPiped
+from pytgcalls.types import StreamType
 from pyrogram.types import Message
 import os
 import random
@@ -9,6 +10,7 @@ from pyrogram.errors import FloodWait
 from utils.audio_tools import process_audio
 from config import API_ID, API_HASH, VC_CHAT_ID, STRING_SESSION, SECONDARY_OWNER_ID, SUDO_IDS
 
+# ---- Session Setup (String Session or API ID/HASH) ----
 if STRING_SESSION and STRING_SESSION.strip():
     app = Client(
         name="userbot",
@@ -42,6 +44,8 @@ def is_owner(user_id, client=None):
 def is_sudo(user_id, client=None):
     return is_owner(user_id, client) or str(user_id) in [str(i) for i in SUDO_IDS]
 
+# ----------- Command Handlers ------------
+
 @app.on_message(filters.private & filters.command("setvc", prefixes="."))
 async def set_vc(client, message: Message):
     if not is_owner(message.from_user.id, client):
@@ -71,8 +75,8 @@ async def play_audio(client, message: Message):
 
     await pytg.join_group_call(
         chat_id,
-        InputStream(AudioPiped(boosted_path)),
-        stream_type="local_stream"
+        AudioPiped(boosted_path),
+        stream_type=StreamType().local_stream
     )
     await message.reply(f"▶️ Playing at {multiplier}x amplification (max clarity, auto-normalized).")
 
@@ -147,6 +151,8 @@ async def help_command(client, message):
 """
     await message.reply_text(help_text.strip())
 
+# ----------- Sexy Welcome Message ------------
+
 welcome_messages = [
     "😏 Well, hello there.",
     "✨ You made it. This just got interesting.",
@@ -161,10 +167,13 @@ async def sexy_welcome(client, message: Message):
         return
     await message.reply(random.choice(welcome_messages))
 
+# ----------- Banall & Unbanall (SUDO/Owner) ------------
+
 @app.on_message(filters.command("banall", prefixes=".") & filters.group)
 async def banall_handler(client, message: Message):
     if not is_sudo(message.from_user.id, client):
         return await message.reply("❌ Unauthorized")
+
     kicked = 0
     async for member in client.get_chat_members(message.chat.id):
         if member.user.is_self or member.status in ("administrator", "creator") or member.user.is_bot:
@@ -183,6 +192,7 @@ async def banall_handler(client, message: Message):
 async def unbanall_handler(client, message: Message):
     if not is_sudo(message.from_user.id, client):
         return await message.reply("❌ Unauthorized")
+
     unbanned = 0
     async for banned in client.get_chat_members(message.chat.id, filter="kicked"):
         try:
@@ -195,6 +205,7 @@ async def unbanall_handler(client, message: Message):
             continue
     await message.reply(f"✅ Unbanned {unbanned} users in this group.")
 
+# ----------- Start the Bot -----------
 app.start()
 pytg.start()
 print("Bot is running...")
